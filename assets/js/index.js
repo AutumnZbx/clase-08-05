@@ -1,4 +1,8 @@
 
+let currentPage =1;
+let loadCharacters = [];
+let isLoading  =false;
+
 
 const obtenerPersonajes = async()=>{
     try{
@@ -10,6 +14,30 @@ const obtenerPersonajes = async()=>{
     }
 }
 
+
+const enviarDatos=(id,name,species,status,image,location)=>{
+    const rutaArchivoHTML ="../personaje.html"
+    fetch(rutaArchivoHTML)
+        .then((response => response.text))
+        .then(html =>{
+            const parser=new DOMParser();
+            const doc = parser.parseFromString(html,`text/html`);
+
+            const imagePage = doc.getElementById("imagePage");
+            imagePage.src = image;
+            imagePage.classList.add("card-img-top");
+
+            const namePage = doc.getElementById("name")
+            namePage.textContent=name;
+
+            const speciesPage = doc.getElementById("species")
+            speciesPage.textContent=species;
+
+            const statusPage = doc.getElementById("status")
+            statusPage.textContent=status;
+             
+        })
+}
 const crearTarjetas = async(results = []) =>{
     let personajesRow = document.getElementById("personajesRow");
     results.map((result)=>{
@@ -57,6 +85,9 @@ const crearTarjetas = async(results = []) =>{
         btnVer.classList.add("btn");
         btnVer.classList.add("btn-warning");
         btnVer.textContent ="Ver más";
+        btnVer.addEventListener("click",()=>{
+            enviarDatos =(id,name,species,status,image,location)
+        })
 
         divRow.appendChild(card);
 
